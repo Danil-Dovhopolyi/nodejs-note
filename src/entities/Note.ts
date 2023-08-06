@@ -1,6 +1,5 @@
-export interface Note {
-  id: number;
-  createdAt: Date;
+import { EntityBase } from './EntityBase.js';
+export interface Note extends EntityBase {
   content: string;
   category: string;
   dates: string;

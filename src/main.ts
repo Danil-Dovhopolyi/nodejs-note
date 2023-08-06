@@ -1,14 +1,22 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import router from './routes/notes.routes.js';
+import cors from 'cors';
+import { NoteController } from './controllers/NoteController.js';
+import { InMemoryNoteRepository } from './repository/InMemoryRepository.js';
+import { NoteService } from './services/NoteService.js';
 
 const app = express();
-const port = 3000;
 
 app.use(bodyParser.json());
+app.use(cors());
 
-app.use('/notes', router);
+const noteRepository = new InMemoryNoteRepository();
+const noteService = new NoteService(noteRepository);
+const noteController = new NoteController(noteService);
 
+app.use('/api', noteController.getRouter());
+
+const port = 3000;
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server running on http://localhost:${port}`);
 });
